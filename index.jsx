@@ -127,16 +127,33 @@ const REVIEWS = [
     quote: "Consistent, unrushed, and my color has never been this even. Worth the drive from the city." },
 ];
 
-const LOOKBOOK = [
-  { id: "l1", title: "Soft Copper Balayage", category: "Color", stylist: "Sofia Martinez", seed: "lume1", h: 340 },
-  { id: "l2", title: "Blunt Editorial Bob", category: "Cuts", stylist: "Maya Chen", seed: "lume2", h: 420 },
-  { id: "l3", title: "Undone Waves", category: "Styling", stylist: "Amelia Rose", seed: "lume3", h: 300 },
-  { id: "l4", title: "Sculpted Skin Fade", category: "Cuts", stylist: "Jordan Lee", seed: "lume4", h: 380 },
-  { id: "l5", title: "Champagne Gloss", category: "Color", stylist: "Maya Chen", seed: "lume5", h: 300 },
-  { id: "l6", title: "Studio Interior", category: "Styling", stylist: "LUMÉ Studio", seed: "lume6", h: 260 },
-  { id: "l7", title: "Sculpted Brow", category: "Beauty", stylist: "LUMÉ Studio", seed: "lume7", h: 320 },
-  { id: "l8", title: "Event-Ready Updo", category: "Styling", stylist: "Amelia Rose", seed: "lume8", h: 400 },
-];
+/* ---- Real photography, sourced from Pexels (free license, no attribution required) ----
+   Credits, kept here for reference:
+   Max Vakhtbovych (@artbovich)   — salon interiors: 7750098, 7750099, 7750108, 7750116
+   cottonbro studio (@cottonbro)  — haircut & color: 3992865, 3992873, 3992875, 3992876,
+                                     3992879, 3993304, 3993320, 3993326
+   Engin Akyurt                   — styling/curls: 3065171
+   Ali Aliev                      — men's fade: 12074386
+   shkraba anthony                — men's haircut: 4625626
+   leonardokfn                    — men's haircut: 7781848
+*/
+function pexels(id, w, h) {
+  return `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${w}${h ? `&h=${h}&fit=crop` : ""}`;
+}
+const PHOTOS = {
+  heroSalon: pexels(7750098, 1400, 1700),
+  aboutSalon: pexels(7750116, 1200, 1400),
+  artFeature: pexels(7750099, 1600, 1100),
+  artGrid: [
+    { id: 3992875, alt: "Hairstylist trimming a client's hair, close focus, in the LUMÉ studio" },
+    { id: 3992876, alt: "Stylist preparing a client for a precision haircut" },
+    { id: 4625626, alt: "Barber giving a modern men's haircut in a contemporary barbershop" },
+    { id: 7781848, alt: "Profile view of a client's tailored men's haircut" },
+    { id: 3993326, alt: "Hair stylist applying a glossing color treatment" },
+    { id: 7750098, alt: "Salon vanity mirrors and styling stations with warm lighting" },
+    { id: 7750108, alt: "Contemporary salon interior with illuminated vanity mirrors" },
+  ],
+};
 
 const OFFERS = [
   { id: "o1", tag: "New Client", title: "20% off your first visit", type: "percent", value: 20 },
@@ -353,6 +370,21 @@ function GlobalStyles() {
       .lume .hero-img-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
       .lume .float-card{ position:absolute; background:var(--white); border-radius:3px; box-shadow:0 14px 34px rgba(35,31,28,.16); padding:14px 16px; }
       .lume .duotone{ filter:sepia(.22) saturate(1.3) contrast(1.05) grayscale(.12); }
+      /* about */
+      .lume .about-grid{ display:grid; grid-template-columns:1fr; gap:36px; align-items:center; }
+      @media(min-width:900px){ .lume .about-grid{ grid-template-columns:1fr 1fr; gap:56px; } }
+      .lume .about-img-wrap{ border-radius:3px; overflow:hidden; aspect-ratio:4/5; background:var(--stone); }
+      .lume .about-img-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+      .lume .about-features{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:30px; }
+      .lume .feature-item{ padding-top:14px; border-top:1px solid var(--border); }
+      /* art of hair */
+      .lume .art-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+      @media(min-width:640px){ .lume .art-grid{ grid-template-columns:repeat(4,1fr); } }
+      .lume .art-feature{ grid-column:span 2; grid-row:span 2; border-radius:3px; overflow:hidden; aspect-ratio:4/3; }
+      @media(min-width:640px){ .lume .art-feature{ aspect-ratio:auto; height:100%; min-height:420px; } }
+      .lume .art-thumb{ border-radius:3px; overflow:hidden; aspect-ratio:1/1; }
+      .lume .art-feature img, .lume .art-thumb img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease; }
+      .lume .art-feature:hover img, .lume .art-thumb:hover img{ transform:scale(1.04); }
       /* quick booking */
       .lume .qb{ margin-top:-40px; position:relative; z-index:5; }
       @media(min-width:900px){ .lume .qb{ margin-top:-56px; } }
@@ -385,16 +417,6 @@ function GlobalStyles() {
       .lume .sty-photo img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
       .lume .sty-card:hover .sty-photo img{ transform:scale(1.05); }
       .lume .sty-body{ padding:16px 18px 20px; }
-      /* lookbook masonry */
-      .lume .lb-grid{ column-count:1; column-gap:16px; }
-      @media(min-width:640px){ .lume .lb-grid{ column-count:2; } }
-      @media(min-width:1024px){ .lume .lb-grid{ column-count:3; } }
-      .lume .lb-item{ break-inside:avoid; margin-bottom:16px; position:relative; border-radius:3px; overflow:hidden; cursor:pointer; }
-      .lume .lb-item img{ width:100%; display:block; transition:transform .5s ease; }
-      .lume .lb-item:hover img{ transform:scale(1.04); }
-      .lume .lb-overlay{ position:absolute; inset:0; background:linear-gradient(to top, rgba(35,31,28,.78), rgba(35,31,28,0) 55%);
-        display:flex; align-items:flex-end; padding:16px; opacity:0; transition:opacity .3s ease; }
-      .lume .lb-item:hover .lb-overlay{ opacity:1; }
       /* reviews */
       .lume .rev-grid{ display:grid; grid-template-columns:1fr; gap:18px; }
       @media(min-width:768px){ .lume .rev-grid{ grid-template-columns:1fr 1fr; } }
@@ -717,7 +739,7 @@ export default function App() {
         <div className="container nav-inner">
           <button className="nav-logo" onClick={() => scrollToId("home")}>{BIZ.name}</button>
           <div className="nav-links">
-            {["Services", "Stylists", "Lookbook", "Reviews", "Rewards"].map((n) => (
+            {["About", "Services", "Stylists", "Reviews", "Rewards"].map((n) => (
               <button key={n} className="nav-link" onClick={() => scrollToId(n.toLowerCase())}>{n}</button>
             ))}
           </div>
@@ -738,7 +760,7 @@ export default function App() {
           <button className="icon-btn" aria-label="Close menu" onClick={() => setMobileMenu(false)}><X size={18} /></button>
         </div>
         <div style={{ marginTop: 20, flex: 1 }}>
-          {["Home", "Services", "Stylists", "Lookbook", "Reviews", "Rewards"].map((n) => (
+          {["Home", "About", "Services", "Stylists", "Reviews", "Rewards"].map((n) => (
             <button key={n} className="mlink" onClick={() => scrollToId(n.toLowerCase())}>{n}</button>
           ))}
         </div>
@@ -761,7 +783,7 @@ export default function App() {
             </div>
           </div>
           <div className="hero-img-wrap">
-            <img className="duotone" src="https://picsum.photos/seed/lumehero/900/1100" alt="Stylist finishing a client's hair in the LUMÉ studio" />
+            <img src={PHOTOS.heroSalon} alt="Sunlit LUMÉ styling station with mirrors and warm ambient lighting" />
             <div className="float-card" style={{ top: 18, left: 18 }}>
               <div style={{ fontSize: 10.5, letterSpacing: ".06em", textTransform: "uppercase", color: "var(--charcoalSoft)", fontWeight: 600 }}>Next available</div>
               <div className="serif" style={{ fontSize: 20, marginTop: 2 }}>Today · 4:30 PM</div>
@@ -785,6 +807,63 @@ export default function App() {
           <QuickBooking upcoming={upcoming} onFind={openBooking} />
         </div>
       </div>
+
+      {/* ABOUT */}
+      <section id="about" className="sec">
+        <div className="container about-grid">
+          <div className="about-img-wrap">
+            <img src={PHOTOS.aboutSalon} alt="Warm, spacious LUMÉ studio seating area with marble floor and soft lighting" />
+          </div>
+          <div>
+            <Eyebrow>Our Story</Eyebrow>
+            <h2 style={{ fontSize: 36, marginTop: 10 }}>Beauty, refined.</h2>
+            <p style={{ fontSize: 15, color: "var(--charcoalSoft)", marginTop: 16, lineHeight: 1.7 }}>
+              LUMÉ Studio was built around a simple idea: beauty should feel personal. Great hair isn't styled from a chart — it's considered, appointment by appointment, around the person actually sitting in the chair.
+            </p>
+            <p style={{ fontSize: 15, color: "var(--charcoalSoft)", marginTop: 14, lineHeight: 1.7 }}>
+              Every visit starts with a real conversation about your features, your routine, and how you want to feel when you leave. From there, our artists combine modern technique with unhurried consultation — refined cuts, dimensional color, effortless styling.
+            </p>
+            <p style={{ fontSize: 15, color: "var(--charcoalSoft)", marginTop: 14, lineHeight: 1.7 }}>
+              Nothing about the LUMÉ experience is rushed. It's calm, considered, and entirely yours.
+            </p>
+            <div className="about-features">
+              {[
+                { icon: Heart, label: "Personalised", desc: "Consultations designed around you." },
+                { icon: Award, label: "Expert", desc: "Modern technique with professional precision." },
+                { icon: Sparkles, label: "Considered", desc: "Premium products and thoughtful details." },
+                { icon: Check, label: "Effortless", desc: "Beautiful results designed for real life." },
+              ].map((f) => (
+                <div key={f.label} className="feature-item">
+                  <f.icon size={18} color="var(--burgundy)" />
+                  <div style={{ fontWeight: 600, fontSize: 13.5, marginTop: 8 }}>{f.label}</div>
+                  <div style={{ fontSize: 12.5, color: "var(--charcoalSoft)", marginTop: 3 }}>{f.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* THE ART OF HAIR */}
+      <section id="art-of-hair" className="sec sec-alt">
+        <div className="container">
+          <Eyebrow>Editorial</Eyebrow>
+          <h2 style={{ fontSize: 40, marginTop: 10 }}>The Art of Hair.</h2>
+          <p className="serif" style={{ fontSize: 18, color: "var(--charcoalSoft)", marginTop: 8, maxWidth: 520 }}>
+            Precision cuts, effortless styling, and considered color — crafted around you.
+          </p>
+          <div className="art-grid" style={{ marginTop: 30 }}>
+            <div className="art-feature">
+              <img src={PHOTOS.artFeature} alt="Wide view of the LUMÉ studio's sleek, modern seating area" />
+            </div>
+            {PHOTOS.artGrid.map((p) => (
+              <div key={p.id} className="art-thumb">
+                <img src={pexels(p.id, 700, 700)} alt={p.alt} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* SERVICES */}
       <section id="services" className="sec">
@@ -850,32 +929,6 @@ export default function App() {
                   <div style={{ marginTop: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <StarRow rating={st.rating} />
                     <span className="btn-ghost" style={{ fontSize: 12, fontWeight: 600 }}>View Profile</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* LOOKBOOK */}
-      <section id="lookbook" className="sec">
-        <div className="container">
-          <Eyebrow>Gallery</Eyebrow>
-          <h2 style={{ fontSize: 40, marginTop: 10 }}>The LUMÉ Lookbook.</h2>
-          <div className="scrollx" style={{ margin: "22px 0" }}>
-            {["All", "Cuts", "Color", "Styling", "Beauty"].map((c) => (
-              <button key={c} className={`chip ${lbFilter === c ? "active" : ""}`} onClick={() => setLbFilter(c)}>{c}</button>
-            ))}
-          </div>
-          <div className="lb-grid">
-            {lbList.map((l) => (
-              <div key={l.id} className="lb-item" onClick={() => setLightbox(l)} style={{ height: l.h }}>
-                <img className="duotone" src={`https://picsum.photos/seed/${l.seed}/600/${l.h}`} alt={l.title} style={{ height: "100%", objectFit: "cover" }} />
-                <div className="lb-overlay">
-                  <div style={{ color: "var(--white)" }}>
-                    <div style={{ fontWeight: 600, fontSize: 14 }}>{l.title}</div>
-                    <div style={{ fontSize: 11.5, opacity: .85 }}>{l.category} · {l.stylist}</div>
                   </div>
                 </div>
               </div>
@@ -1007,7 +1060,6 @@ export default function App() {
           <p className="serif" style={{ fontSize: 18, color: "var(--charcoalSoft)", marginTop: 10 }}>Choose your service, find your time, and leave the rest to us.</p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24, flexWrap: "wrap" }}>
             <button className="btn btn-primary" onClick={() => openBooking()}>Book an Appointment</button>
-            <button className="btn btn-outline" onClick={() => scrollToId("lookbook")}>Explore the Lookbook</button>
           </div>
         </div>
       </section>
@@ -1024,7 +1076,7 @@ export default function App() {
           </div>
           <div>
             <div style={{ fontSize: 11, letterSpacing: ".08em", textTransform: "uppercase", color: "#A99C88", marginBottom: 10 }}>Explore</div>
-            {["Services", "Stylists", "Lookbook", "Reviews", "Rewards"].map((n) => (
+            {["Services", "Stylists", "Reviews", "Rewards"].map((n) => (
               <button key={n} className="foot-link" onClick={() => scrollToId(n.toLowerCase())}>{n}</button>
             ))}
           </div>
@@ -1521,7 +1573,7 @@ export default function App() {
           <div className="overlay-bg" onClick={() => setLightbox(null)} />
           <div className="modal-panel" role="dialog" aria-modal="true" style={{ width: "min(640px,92vw)", padding: 0, overflow: "hidden" }}>
             <button className="icon-btn" aria-label="Close" style={{ position: "absolute", top: 14, right: 14, background: "var(--white)", zIndex: 2 }} onClick={() => setLightbox(null)}><X size={16} /></button>
-            <img className="duotone" src={`https://picsum.photos/seed/${lightbox.seed}/900/700`} alt={lightbox.title} style={{ width: "100%", display: "block", maxHeight: "60vh", objectFit: "cover" }} />
+            <img className="duotone" src={`https://images.pexels.com/photos/${lightbox.seed}/pexels-photo-${lightbox.seed}.jpeg?auto=compress&cs=tinysrgb&w=900`} alt={lightbox.title} style={{ width: "100%", display: "block", maxHeight: "60vh", objectFit: "cover" }} />
             <div style={{ padding: 22 }}>
               <div className="serif" style={{ fontSize: 22 }}>{lightbox.title}</div>
               <div style={{ fontSize: 12.5, color: "var(--charcoalSoft)", marginTop: 4 }}>{lightbox.category} · {lightbox.stylist}</div>
