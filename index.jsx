@@ -551,7 +551,6 @@ export default function App() {
   const [rescheduleDraft, setRescheduleDraft] = useState({ dateISO: null, time: null });
   const [cancelId, setCancelId] = useState(null);
 
-  const [lightbox, setLightbox] = useState(null);
   const [serviceModal, setServiceModal] = useState(null);
   const [stylistModal, setStylistModal] = useState(null);
 
@@ -559,7 +558,6 @@ export default function App() {
   const [svcCategory, setSvcCategory] = useState("All");
   const [svcSearch, setSvcSearch] = useState("");
   const [svcSort, setSvcSort] = useState("default");
-  const [lbFilter, setLbFilter] = useState("All");
 
   const [demoOpen, setDemoOpen] = useState(false);
   const [toasts, setToasts] = useState([]);
@@ -592,8 +590,7 @@ export default function App() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key !== "Escape") return;
-      if (lightbox) setLightbox(null);
-      else if (serviceModal) setServiceModal(null);
+      if (serviceModal) setServiceModal(null);
       else if (stylistModal) setStylistModal(null);
       else if (cancelId) setCancelId(null);
       else if (rescheduleId) setRescheduleId(null);
@@ -603,7 +600,7 @@ export default function App() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox, serviceModal, stylistModal, cancelId, rescheduleId, portalOpen, drawerOpen, mobileMenu]);
+  }, [serviceModal, stylistModal, cancelId, rescheduleId, portalOpen, drawerOpen, mobileMenu]);
 
   function pushToast(msg) {
     const id = Date.now() + Math.random();
@@ -713,7 +710,6 @@ export default function App() {
     .sort((a, b) => (svcSort === "price" ? a.price - b.price : svcSort === "duration" ? a.duration - b.duration : 0));
 
   const reviewList = REVIEWS.filter((r) => reviewFilter === "All" || r.service === reviewFilter);
-  const lbList = LOOKBOOK.filter((l) => lbFilter === "All" || l.category === lbFilter);
 
   const draftSvc = serviceById(draft.serviceId);
   const draftSty = draft.stylistId ? stylistById(draft.stylistId) : null;
@@ -1562,23 +1558,6 @@ export default function App() {
               </div>
               <button className="btn btn-primary btn-block" style={{ marginTop: 22 }}
                 onClick={() => { const id = stylistModal.id; setStylistModal(null); openBooking({ stylistId: id }); }}>Book with {stylistModal.name.split(" ")[0]}</button>
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* LIGHTBOX */}
-      {lightbox && (
-        <>
-          <div className="overlay-bg" onClick={() => setLightbox(null)} />
-          <div className="modal-panel" role="dialog" aria-modal="true" style={{ width: "min(640px,92vw)", padding: 0, overflow: "hidden" }}>
-            <button className="icon-btn" aria-label="Close" style={{ position: "absolute", top: 14, right: 14, background: "var(--white)", zIndex: 2 }} onClick={() => setLightbox(null)}><X size={16} /></button>
-            <img className="duotone" src={`https://images.pexels.com/photos/${lightbox.seed}/pexels-photo-${lightbox.seed}.jpeg?auto=compress&cs=tinysrgb&w=900`} alt={lightbox.title} style={{ width: "100%", display: "block", maxHeight: "60vh", objectFit: "cover" }} />
-            <div style={{ padding: 22 }}>
-              <div className="serif" style={{ fontSize: 22 }}>{lightbox.title}</div>
-              <div style={{ fontSize: 12.5, color: "var(--charcoalSoft)", marginTop: 4 }}>{lightbox.category} · {lightbox.stylist}</div>
-              <button className="btn btn-primary btn-block" style={{ marginTop: 18 }}
-                onClick={() => { const st = STYLISTS.find((s) => s.name === lightbox.stylist); setLightbox(null); openBooking(st ? { stylistId: st.id } : {}); }}>Book this Look</button>
             </div>
           </div>
         </>
